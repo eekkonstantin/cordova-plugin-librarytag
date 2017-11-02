@@ -1,0 +1,26 @@
+{
+  "name": "cordova-plugin-nfcv",
+  "version": "0.0.1",
+  "description": "Provides NfcV functionality for Cordova-based applications",
+  "main": "www/cordova-plugin-nfcv.js",
+  "scripts": {
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kkontagion/cordova-plugin-nfcv.git"
+  },
+  "keywords": [
+    "cordova",
+    "plugin",
+    "nfcv",
+    "android",
+    "javascript"
+  ],
+  "author": "kkontagion",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kkontagion/cordova-plugin-nfcv/issues"
+  },
+  "homepage": "https://github.com/kkontagion/cordova-plugin-nfcv#readme"
+}
