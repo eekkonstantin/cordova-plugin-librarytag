@@ -5,7 +5,7 @@ import android.nfc.tech.NfcV;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
+import java.util.*;
 
 public class NfcVTag {
   private android.nfc.tech.NfcV nfcv = null;
@@ -15,7 +15,7 @@ public class NfcVTag {
     nfcv.connect();
   }
 
-  public byte[] read(Tag tag) throws Exception {
+  public String read(Tag tag) throws Exception {
     if (!isConnected())
       throw new Exception();
 
@@ -25,7 +25,7 @@ public class NfcVTag {
         (byte) 0x01, // block offset
         (byte) 0x03 // number of blocks to read
       };
-      byte[] readRes = nfc.transceive(readCmd);
+      byte[] readRes = nfcv.transceive(readCmd);
 
     // Release resources
     disconnect();
@@ -44,7 +44,7 @@ public class NfcVTag {
   }
 
   private String cleanTransceive(byte[] response) {
-    ArrayList<Byte> cleaned = new ArrayList<>();
+    ArrayList<Byte> cleaned = new ArrayList<Byte>();
     for (byte b : response) {
       if (b != 0)
         cleaned.add(b);
