@@ -14,11 +14,11 @@
             </feature>
         </config-file>
         <source-file src="src/android/NfcVPlugin.java"
-                     target-dir="src/com/kkontagion/NfcVPlugin"/>
-        <source-file src="src/android/MifareUltralight.java"
-                     target-dir="src/com/kkontagion/MifareUltralight"/>
-        <source-file src="src/android/NfcV.java"
-                     target-dir="src/com/kkontagion/NfcV"/>
+                     target-dir="src/com/kkontagion"/>
+        <!-- <source-file src="src/android/MifareUltralight.java"
+                     target-dir="src/com/kkontagion/MifareUltralight"/> -->
+        <source-file src="src/android/NfcVTag.java"
+                     target-dir="src/com/kkontagion"/>
 
 
         <config-file target="AndroidManifest.xml" parent="/manifest">

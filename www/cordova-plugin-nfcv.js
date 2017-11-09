@@ -18,17 +18,17 @@ exports.isConnected = function(success, error) {
     exec(success, error, pluginName, "isConnected", []);
 };
 
-exports.read = function(page, success, error) {
-    exec(success, error, pluginName, "read", [page]);
+exports.read = function(success, error) {
+    exec(success, error, pluginName, "read", []);
 };
 
-exports.write = function(page, data, success, error) {
-    exec(success, error, pluginName, "write", [page, data]);
-};
-
-exports.unlock = function(pin, success, error) {
-    exec(success, error, pluginName, "unlock", [pin]);
-};
+// exports.write = function(page, data, success, error) {
+//     exec(success, error, pluginName, "write", [page, data]);
+// };
+//
+// exports.unlock = function(pin, success, error) {
+//     exec(success, error, pluginName, "unlock", [pin]);
+// };
 
 exports.echo = function(phrase, cb) {
     exec(cb, null, pluginName, 'echo', [phrase]);

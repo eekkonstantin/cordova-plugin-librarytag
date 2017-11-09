@@ -16,7 +16,7 @@ This plugins lets you interact with Mifare Ultralight NFC tags on Android device
 
 ## Installation
 ### PhoneGap Build
-Include 
+Include
 
 ```
 <plugin name="cordova-plugin-mifare-ultralight" spec="~1.0.0"/>
@@ -35,12 +35,12 @@ cordova plugin add cordova-plugin-mifare-ultralight
 There is currently only one event emitted by the plugin and that is for found tags. To listen for the event, use this code:
 
 ```javascript
-document.addEventListener('mifareTagDiscovered', (tag) => {
+document.addEventListener('nfcvTagDiscovered', (tag) => {
     alert(`Found tag: ${tag}`);
 });
 ```
 
-The tag passed as parameter contains tag id as an array of bytes as returned by `Tag` class method [`getId()`](https://developer.android.com/reference/android/nfc/Tag.html#getId()). 
+The tag passed as parameter contains tag id as an array of bytes as returned by `Tag` class method [`getId()`](https://developer.android.com/reference/android/nfc/Tag.html#getId()).
 
 ### Methods
 All methods provided can be found via `window.mifare`. If you are using TypeScript, you'll need to add this line on top of each file where you intend to access the plugin:
@@ -71,8 +71,8 @@ window.mifare.enabled(() => alert('NFC enabled'), status => alert(status));
 #### mifare.connect
 `mifare.connect(success, failure)`
 
-Connects to tag that was found. This is usually called inside the event handler for `mifareTagDiscovered`. 
- 
+Connects to tag that was found. This is usually called inside the event handler for `mifareTagDiscovered`.
+
 ##### Example
 ```javascript
 document.addEventListener('mifareTagDiscovered', () => {
@@ -84,7 +84,7 @@ document.addEventListener('mifareTagDiscovered', () => {
 `mifare.disconnect(success, failure)`
 
 Disconnects from the tag that was connected.
- 
+
 ##### Example
 ```javascript
 window.mifare.disconnect(() => alert('Disonnected'), err => alert(`Couldn't disconnect because: ${err}`));
@@ -93,7 +93,7 @@ window.mifare.disconnect(() => alert('Disonnected'), err => alert(`Couldn't disc
 #### mifare.isConnected
 `mifare.isConnected(success, failure)`
 Checks if there is a connection to a tag.
- 
+
 ##### Example
 ```javascript
 window.mifare.isConnected(() => alert('Connected to tag'), () => alert('Not connected'));
@@ -112,7 +112,7 @@ window.mifare.read(4, (response) => alert(response.data), err => alert(`Reading 
 #### mifare.write
 `mifare.write(page, data, success, failure)`
 
-Tries to write the data to the page specified. Parameter `page` should be a number. Parameter `data` should be an array of 4 strings of 2 characters (4 bytes). 
+Tries to write the data to the page specified. Parameter `page` should be a number. Parameter `data` should be an array of 4 strings of 2 characters (4 bytes).
 
 ##### Example
 ```javascript
@@ -122,7 +122,7 @@ window.mifare.write(4, ['AA', 'BB', 'CC', 'DD'], (response) => alert('Write ok')
 #### mifare.unlock
 `mifare.unlock(pin, success, failure)`
 
-Tries to unlock the tag. Parameter `pin` should be a number. 
+Tries to unlock the tag. Parameter `pin` should be a number.
 
 ##### Example
 ```javascript
@@ -133,9 +133,9 @@ window.mifare.unlock(0x1234, (response) => alert('Unlocked successfully'), err =
 
 *Q: Why is there no version to iOS or Windows Phone?*
 
-A: This plugin was written for my own needs to interact with Mifare Ultralight in Cordova-based application on Android. 
+A: This plugin was written for my own needs to interact with Mifare Ultralight in Cordova-based application on Android.
 
-iOS couldn't even be supported as Apple only permits its own wallet application to use the NFC. 
+iOS couldn't even be supported as Apple only permits its own wallet application to use the NFC.
 
 Windows Phone could be supported if someone wrote the necessary native code. I might be able to help a little with this but won't be implementing this all by myself.
 
