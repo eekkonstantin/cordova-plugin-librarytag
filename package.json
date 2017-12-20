@@ -1,8 +1,8 @@
 {
-  "name": "cordova-plugin-nfcv",
+  "name": "cordova-plugin-librarytag",
   "version": "0.0.1",
-  "description": "Provides NfcV functionality for Cordova-based applications",
-  "main": "www/cordova-plugin-nfcv.js",
+  "description": "Provides Cordova-based applications the ability to read a barcode number from a Library RFID tag through NFC-V.",
+  "main": "www/cordova-plugin-librarytag.js",
   "scripts": {
 
   },
@@ -14,13 +14,15 @@
     "cordova",
     "plugin",
     "nfcv",
+    "library",
+    "rfid",
     "android",
     "javascript"
   ],
   "author": "kkontagion",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kkontagion/cordova-plugin-nfcv/issues"
+    "url": "https://github.com/kkontagion/cordova-plugin-librarytag/issues"
   },
-  "homepage": "https://github.com/kkontagion/cordova-plugin-nfcv#readme"
+  "homepage": "https://github.com/kkontagion/cordova-plugin-librarytag#readme"
 }

@@ -2,21 +2,19 @@
 <plugin id="cordova-plugin-nfcv" version="0.0.1"
         xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>cordova-plugin-nfcv</name>
-    <js-module name="nfcv" src="www/cordova-plugin-nfcv.js">
+    <js-module name="nfcv" src="www/cordova-plugin-librarytag.js">
         <clobbers target="nfcv"/>
     </js-module>
     <platform name="android">
         <config-file parent="/*" target="res/xml/config.xml">
-            <feature name="cordova-plugin-nfcv">
+            <feature name="cordova-plugin-librarytag">
                 <param name="android-package"
-                       value="com.kkontagion.NfcVPlugin"/>
+                       value="com.kkontagion.LibraryNfcVPlugin"/>
                 <param name="onload" value="true" />
             </feature>
         </config-file>
-        <source-file src="src/android/NfcVPlugin.java"
+        <source-file src="src/android/LibraryNfcVPlugin.java"
                      target-dir="src/com/kkontagion"/>
-        <!-- <source-file src="src/android/MifareUltralight.java"
-                     target-dir="src/com/kkontagion/MifareUltralight"/> -->
         <source-file src="src/android/NfcVTag.java"
                      target-dir="src/com/kkontagion"/>
 

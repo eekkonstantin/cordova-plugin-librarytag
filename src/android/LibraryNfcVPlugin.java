@@ -20,8 +20,8 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 
-public class NfcVPlugin extends CordovaPlugin {
-    private static final String TAG = "NfcVPlugin";
+public class LibraryNfcVPlugin extends CordovaPlugin {
+    private static final String TAG = "LibraryNfcVPlugin";
     private final List<IntentFilter> intentFilters = new ArrayList<IntentFilter>();
     private final ArrayList<String[]> techLists = new ArrayList<String[]>();
 
@@ -52,7 +52,7 @@ public class NfcVPlugin extends CordovaPlugin {
     @Override
     public void onPause(boolean multitasking) {
         super.onPause(multitasking);
-        stopNfc();
+        stopNfc(null);
     }
 
     @Override
@@ -74,46 +74,7 @@ public class NfcVPlugin extends CordovaPlugin {
             return true;
         }
 
-        if (action.equals("connect")) {
-            this.connect(callbackContext);
-            return true;
-        } else if (action.equals("disconnect")) {
-            this.disconnect(callbackContext);
-            return true;
-        } else if (action.equals("isConnected")) {
-            this.isConnected(callbackContext);
-            return true;
-        } else if (action.equals("read")) {
-            this.read(callbackContext);
-            return true;
-        // } else if (action.equals("write")) {
-        //     final String arg0 = args.getString(0);
-        //     final int pageOffset = Integer.parseInt(arg0);
-        //     final byte[] data = jsonToByteArray(args.getJSONArray(1));
-        //     this.write(callbackContext, pageOffset, data);
-        //     return true;
-        // } else if (action.equals("unlock")) {
-        //     final String arg0 = args.getString(0);
-        //     final int pin = Integer.parseInt(arg0);
-        //     this.unlock(callbackContext, pin);
-        //     return true;
-        } else if (action.equals("echo")) {
-          final String arg0 = args.getString(0);
-          // final PluginResult result = new PluginResult(PluginResult.Status.OK, "Received: " + arg0);
-          // callbackContext.sendPluginResult(result);
-          this.echo(arg0, callbackContext);
-          return true;
-        }
-
         return false;
-    }
-
-    private void echo(String phrase, CallbackContext callbackContext) {
-      if (phrase != null && phrase.length() > 0) {
-        callbackContext.success("Received: " + phrase);
-      } else {
-        callbackContext.error("Expected one non-empty string argument.");
-      }
     }
 
     @Override
@@ -125,104 +86,19 @@ public class NfcVPlugin extends CordovaPlugin {
         parseMessage();
     }
 
-    private void connect(final CallbackContext callbackContext) {
-        cordova.getThreadPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                if (getIntent() == null) { // Lost Tag
-                    clean(callbackContext, "No tag available.");
-                    return;
-                }
-
-                final Tag tag = savedIntent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-                if (tag == null) {
-                    clean(callbackContext, "No tag available.");
-                    return;
-                }
-                try {
-                    Log.i(TAG, "Tag is: " + tag);
-                    nfcv.connect(tag);
-                    callbackContext.success();
-                } catch (final Exception e) {
-                    clean(callbackContext, e);
-                }
-            }
-        });
-    }
-
-    private void disconnect(final CallbackContext callbackContext) {
-        cordova.getThreadPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                if (getIntent() == null) { // Lost Tag
-                    clean(callbackContext, "No tag available.");
-                    return;
-                }
-                try {
-                    nfcv.disconnect();
-                    callbackContext.success();
-                } catch (final Exception e) {
-                    clean(callbackContext, e);
-                }
-            }
-        });
-    }
-
-    private void isConnected(final CallbackContext callbackContext) {
-        cordova.getThreadPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                if (getIntent() == null) { // Lost Tag
-                    clean(callbackContext, "No tag available.");
-                    return;
-                }
-                try {
-                    final boolean isConnected = nfcv.isConnected();
-                    final JSONObject result = new JSONObject();
-                    result.put("connected", isConnected);
-                    callbackContext.success(result);
-                } catch (final Exception e) {
-                    clean(callbackContext, e);
-                }
-            }
-        });
-    }
-
-    private void read(final CallbackContext callbackContext) {
-      cordova.getThreadPool().execute(new Runnable() {
-        @Override
-        public void run() {
-          if (getIntent() == null) { // Lost Tag
-            clean(callbackContext, "No tag available.");
-            return;
-          }
-          try {
-            // String result = nfcv.read(tag);
-            // final byte[] data = mifareUltralight.read(pageOffset);
-            // final JSONObject result = new JSONObject();
-            // result.put("data", bytesToHex(data));
-            callbackContext.success(nfcv.read(tag));
-          } catch (final Exception e) {
-            clean(callbackContext, e);
-          }
-        }
-      });
-    }
-
     private void fireTagEvent(Tag tag, String name) {
       JSONArray json = new JSONArray();
-      json.put(tag.getTechList());
+
+      try {
+          Log.i(TAG, "Tag is: " + tag);
+          nfcv.connect(tag);
+          json.put(nfcv.read(tag));
+      } catch (Exception e) {
+          Log.e(TAG, e.toString());
+      }
+
       String command = MessageFormat.format(javaScriptEventTemplate, name, json);
       this.webView.sendJavascript(command);
-    }
-
-    private void clean(final CallbackContext callbackContext, Exception e) {
-        clean(callbackContext, "Error: " + e);
-    }
-
-    private void clean(final CallbackContext callbackContext, String error) {
-        tag = null;
-        callbackContext.error("Error: " + error);
     }
 
     private IntentFilter[] getIntentFilters() {
@@ -248,7 +124,7 @@ public class NfcVPlugin extends CordovaPlugin {
         });
     }
 
-    private void stopNfc() {
+    private void stopNfc(final CallbackContext cb) {
         Log.d(TAG, "stopping NfcV service");
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
@@ -258,6 +134,8 @@ public class NfcVPlugin extends CordovaPlugin {
                 if (nfcAdapter != null) {
                     try {
                         nfcAdapter.disableForegroundDispatch(getActivity());
+                        if (cb != null)
+                          cb.success("NFC Adapter removed.");
                     } catch (IllegalStateException e) {
                         Log.w(TAG, "Illegal State Exception stopping NFC. Assuming application is terminating.");
                     }
@@ -293,7 +171,7 @@ public class NfcVPlugin extends CordovaPlugin {
 
                 Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                 if (action.equals(NfcAdapter.ACTION_TAG_DISCOVERED)) {
-                    fireTagEvent(tag, "nfcvTagDiscovered");
+                    fireTagEvent(tag, "libraryTagDiscovered");
                 }
                 setIntent(new Intent());
             }
