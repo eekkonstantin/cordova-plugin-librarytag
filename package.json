@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kkontagion/cordova-plugin-nfcv.git"
+    "url": "git+https://github.com/kkontagion/cordova-plugin-librarytag.git"
   },
   "keywords": [
     "cordova",
