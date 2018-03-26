@@ -12,7 +12,7 @@ This plugin lets your app scan a library RFID tag (NFCV) and get the barcode num
 Include
 
 ```
-<plugin name="cordova-plugin-librarytag" spec="~1.0.0"/>
+<plugin name="cordova-plugin-librarytag" spec="0.0.1"/>
 ```
 
 
